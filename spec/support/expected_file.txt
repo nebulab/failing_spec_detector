@@ -1,0 +1,15 @@
+Failing spec detector:
+Test Error 1:
+
+/spec/one_spec.rb:11:in `some_method':
+/spec/two_spec.rb:20:in `some_method':
+
+
+
+Test Error 2:
+
+/spec/three_spec.rb:4:in `some_method':
+
+
+
+----------------------------------------------------------------

@@ -1,5 +1,7 @@
 require "bundler/setup"
-require "failing_spec_detector"
+require "failing_spec_detector/failing_spec_formatter"
+require 'fileutils'
+require 'tempfile'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
