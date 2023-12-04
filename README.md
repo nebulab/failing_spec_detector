@@ -1,15 +1,39 @@
 # FailingSpecDetector
+  A rspec extension introdusing a custom formatter, to detect failing specs and group them by exception.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/failing_spec_detector`. To experiment with that code, run `bin/console` for an interactive prompt.
+### Output Example
+> log.txt:
 
-TODO: Delete this and the text above, and describe your gem
+```txt
+Failing spec detector:
+Test Exception 1:
 
+/spec/one_spec.rb:11:in `some_method':
+/spec/two_spec.rb:20:in `some_method':
+
+
+
+Test Exception 2:
+
+/spec/one_spec.rb:14:in `some_method':
+/spec/three_spec.rb:4:in `some_method':
+
+
+
+Test Exception 3:
+
+/spec/three_spec.rb:4:in `some_method':
+
+
+
+----------------------------------------------------------------
+```
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'failing_spec_detector'
+gem 'failing_spec_detector', github: 'nebulab/failing_spec_detector'
 ```
 
 And then execute:
@@ -22,7 +46,20 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add this lines to your application's .rspec file:
+
+```ruby
+  --require failing_spec_detector/failing_spec_formatter.rb
+  --format FailingSpecDetector::FailingSpecFormatter
+```
+
+And run your test suite:
+
+    $ rspec spec
+
+Or run your test suite using this command:
+
+    $ rspec spec --require failing_spec_detector/failing_spec_formatter.rb --format FailingSpecDetector::FailingSpecFormatter
 
 ## Development
 
@@ -32,7 +69,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/failing_spec_detector.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nebulab/failing_spec_detector/issues.
 
 ## License
 
