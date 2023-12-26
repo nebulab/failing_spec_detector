@@ -5,10 +5,14 @@ require 'spec_helper'
 RSpec.describe FailingSpecDetector::FailingSpecFormatter do
   let(:formatter) { described_class.new(output) }
   let(:output) { Tempfile.new('./output_to_close') }
-  let(:expected_file_path) { './spec/support/expected_file.txt' }
-  let(:actual_file_path) { './log.txt' }
-  let(:expected_file) { File.new(expected_file_path, 'r') }
-  let(:actual_file) { File.new(actual_file_path, 'r') }
+  let(:expected_failures_file_path) { './spec/support/expected_failures_log_.yml' }
+  let(:expected_exceptions_file_path) { './spec/support/expected_exceptions_log_.yml' }
+  let(:actual_failures_file_path) { './failures_log_.yml' }
+  let(:actual_exceptions_file_path) { './exceptions_log_.yml' }
+  let(:expected_failures_file) { File.new(expected_failures_file_path, 'r') }
+  let(:expected_exceptions_file) { File.new(expected_exceptions_file_path, 'r') }
+  let(:actual_failures_file) { File.new(actual_failures_file_path, 'r') }
+  let(:actual_exceptions_file) { File.new(actual_exceptions_file_path, 'r') }
 
   let(:examples) { [failed_notification1, failed_notification2, failed_notification3] }
   let(:expected_exceptions) { [failed_notification1.exception.to_s, failed_notification3.exception.to_s] }
@@ -54,9 +58,10 @@ RSpec.describe FailingSpecDetector::FailingSpecFormatter do
     example
   end
 
-  it 'prints the failing specs backtraces grouped by exception' do
+  it 'stores the failing specs failures and exceptions in yml files' do
     mock_run_specs
-    expect(FileUtils.compare_file(actual_file, expected_file)).to be_truthy
+    expect(FileUtils.compare_file(actual_failures_file, expected_failures_file)).to be_truthy
+    expect(FileUtils.compare_file(actual_exceptions_file, expected_exceptions_file)).to be_truthy
   end
 
   def mock_run_specs
