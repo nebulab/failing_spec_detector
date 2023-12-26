@@ -1,4 +1,4 @@
-require "failing_spec_detector/version"
+require 'failing_spec_detector/version'
 
 module FailingSpecDetector
   class Error < StandardError; end

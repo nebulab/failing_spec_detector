@@ -6,7 +6,7 @@ RSpec.describe FailingSpecDetector::FailingSpecFormatter do
   let(:formatter) { described_class.new(output) }
   let(:output) { Tempfile.new('./output_to_close') }
   let(:expected_file_path) { './spec/support/expected_file.txt' }
-  let(:actual_file_path) { './log.txt' }
+  let(:actual_file_path) { './failing_specs_detector_log_.txt' }
   let(:expected_file) { File.new(expected_file_path, 'r') }
   let(:actual_file) { File.new(actual_file_path, 'r') }
 
@@ -52,6 +52,10 @@ RSpec.describe FailingSpecDetector::FailingSpecFormatter do
     example.metadata[:execution_result].exception = exception
 
     example
+  end
+
+  after do
+    File.delete(actual_file_path)
   end
 
   it 'prints the failing specs backtraces grouped by exception' do
