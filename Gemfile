@@ -4,5 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'pry'
+gem 'psych', '~> 4.0.6'
 gem 'rspec', '~>3.12'
 gem 'rubocop'

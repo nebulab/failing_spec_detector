@@ -23,3 +23,37 @@ jobs:
         run: bundle exec rake rubocop
       - name: Run tests
         run: bundle exec rake spec
+      - name: Upload Failures
+        uses: actions/upload-artifact@v3
+        with:
+          name: Failures
+          path: failures_log_*.yml
+      - name: Upload Exceptions
+        uses: actions/upload-artifact@v3
+        with:
+          name: Exceptions
+          path: exceptions_log_*.yml
+
+  print_log:
+    name: Test print logs task
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+      - name: Download Failures
+        uses: actions/download-artifact@v3
+        with:
+          name: Failures
+      - name: Download Exceptions
+        uses: actions/download-artifact@v3
+        with:
+          name: Exceptions
+      - name: Run print_log task
+        run: bundle exec rake failing_specs_detector:print_log
+
