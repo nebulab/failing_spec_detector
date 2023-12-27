@@ -16,11 +16,11 @@ RSpec.describe FailingSpecDetector::FailingSpecFormatter do
 
   let(:examples) { [failed_notification1, failed_notification2, failed_notification3] }
   let(:expected_exceptions) { [failed_notification1.exception.to_s, failed_notification3.exception.to_s] }
-  let(:failed_notification1)  { ::RSpec::Core::Notifications::ExampleNotification.for(failed_example1) }
-  let(:failed_notification2)  { ::RSpec::Core::Notifications::ExampleNotification.for(failed_example2) }
-  let(:failed_notification3)  { ::RSpec::Core::Notifications::ExampleNotification.for(failed_example3) }
+  let(:failed_notification1)  { RSpec::Core::Notifications::ExampleNotification.for(failed_example1) }
+  let(:failed_notification2)  { RSpec::Core::Notifications::ExampleNotification.for(failed_example2) }
+  let(:failed_notification3)  { RSpec::Core::Notifications::ExampleNotification.for(failed_example3) }
   let(:failed_example1) do
-    exception = ::RuntimeError.new('Test Error 1')
+    exception = RuntimeError.new('Test Error 1')
     exception.set_backtrace ["/spec/one_spec.rb:11:in `some_method'"]
 
     example = self.class.example
@@ -33,7 +33,7 @@ RSpec.describe FailingSpecDetector::FailingSpecFormatter do
   end
 
   let(:failed_example2) do
-    exception = ::RuntimeError.new('Test Error 1')
+    exception = RuntimeError.new('Test Error 1')
     exception.set_backtrace ["/spec/two_spec.rb:20:in `some_method'"]
 
     example = self.class.example
@@ -46,7 +46,7 @@ RSpec.describe FailingSpecDetector::FailingSpecFormatter do
   end
 
   let(:failed_example3) do
-    exception = ::RuntimeError.new('Test Error 2')
+    exception = RuntimeError.new('Test Error 2')
     exception.set_backtrace ["/spec/three_spec.rb:4:in `some_method'"]
 
     example = self.class.example
