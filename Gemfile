@@ -1,5 +1,4 @@
-source "https://rubygems.org"
-
+source 'https://rubygems.org'
 
 # Specify your gem's dependencies in failing_spec_detector.gemspec
 gemspec

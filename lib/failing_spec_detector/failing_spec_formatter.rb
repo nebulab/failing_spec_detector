@@ -10,7 +10,7 @@ module FailingSpecDetector
       super(output)
       @failures = []
       @exceptions = []
-      @filename = "failing_specs_detector_log_#{ENV['TEST_ENV_NUMBER']}.txt"
+      @filename = "failing_specs_detector_log_#{ENV.fetch('TEST_ENV_NUMBER', nil)}.txt"
     end
 
     def example_failed(failure)
@@ -22,7 +22,7 @@ module FailingSpecDetector
     end
 
     def stop(_notification)
-      File.open(@filename, 'w') { |f| f.write "Failing spec detector log_#{ENV['TEST_ENV_NUMBER']}:\n" }
+      File.write(@filename, "Failing spec detector log_#{ENV.fetch('TEST_ENV_NUMBER', nil)}:\n")
       return if @exceptions.empty?
 
       @exceptions.each do |exception|
