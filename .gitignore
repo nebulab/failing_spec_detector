@@ -9,3 +9,7 @@
 
 # rspec failure tracking
 .rspec_status
+
+# log files
+exceptions_log_*.yml
+failures_log_*.yml
