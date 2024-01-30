@@ -1,0 +1,10 @@
+---
+- !ruby/object:FailingSpecDetector::Failure
+  exception: Test Error 1
+  backtrace: "/spec/one_spec.rb:11:in `some_method'"
+- !ruby/object:FailingSpecDetector::Failure
+  exception: Test Error 1
+  backtrace: "/spec/two_spec.rb:20:in `some_method'"
+- !ruby/object:FailingSpecDetector::Failure
+  exception: Test Error 2
+  backtrace: "/spec/three_spec.rb:4:in `some_method'"

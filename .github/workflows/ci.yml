@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  test:
+    name: Test failing spec detector
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+      - name: Lint  files
+        run: bundle exec rake rubocop
+      - name: Run tests
+        run: bundle exec rake spec
+      - name: Upload Failures
+        uses: actions/upload-artifact@v3
+        with:
+          name: Failures
+          path: failures_log_*.yml
+      - name: Upload Exceptions
+        uses: actions/upload-artifact@v3
+        with:
+          name: Exceptions
+          path: exceptions_log_*.yml
+
+  print_log:
+    name: Test combine log task
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+      - name: Download Failures
+        uses: actions/download-artifact@v3
+        with:
+          name: Failures
+      - name: Download Exceptions
+        uses: actions/download-artifact@v3
+        with:
+          name: Exceptions
+      - name: Run combine_log task
+        run: bundle exec rake failing_specs_detector:combine_log
+      - name: Upload log file
+        uses: actions/upload-artifact@v3
+        with:
+          name: failing_specs_log
+          path: "failing_specs_detector_log.txt"

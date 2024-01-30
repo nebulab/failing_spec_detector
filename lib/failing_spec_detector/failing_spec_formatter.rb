@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'rspec/core/formatters/base_text_formatter'
+require_relative 'failure'
+require 'yaml'
 
 module FailingSpecDetector
   class FailingSpecFormatter < RSpec::Core::Formatters::BaseTextFormatter
@@ -10,7 +12,8 @@ module FailingSpecDetector
       super(output)
       @failures = []
       @exceptions = []
-      @filename = 'log.txt'
+      @failures_filename = "failures_log_#{ENV.fetch('TEST_ENV_NUMBER', nil)}.yml"
+      @exceptions_filename = "exceptions_log_#{ENV.fetch('TEST_ENV_NUMBER', nil)}.yml"
     end
 
     def example_failed(failure)
@@ -18,24 +21,14 @@ module FailingSpecDetector
 
       @exceptions << exception unless @exceptions.include?(exception)
 
+      failure = Failure.new(exception, failure.formatted_backtrace.join("\n"))
+
       @failures << failure
     end
 
     def stop(_notification)
-      File.open(@filename, 'w') { |f| f.write "Failing spec detector:\n" }
-      return if @exceptions.empty?
-
-      @exceptions.each do |exception|
-        File.write(@filename, "#{exception}:\n\n", mode: 'a')
-        related_examples = @failures.select { |failure| failure.exception.to_s.gsub(/\e\[(\d+)m/, '') == exception }
-        next if related_examples.empty?
-
-        related_examples.each do |failure|
-          File.write(@filename, "#{failure.formatted_backtrace.join("\n")}:\n", mode: 'a')
-        end
-        File.write(@filename, "\n\n\n", mode: 'a')
-      end
-      File.write(@filename, '----------------------------------------------------------------', mode: 'a')
+      File.write(@exceptions_filename, YAML.dump(@exceptions), mode: 'w')
+      File.write(@failures_filename, YAML.dump(@failures), mode: 'w')
     end
   end
 end
