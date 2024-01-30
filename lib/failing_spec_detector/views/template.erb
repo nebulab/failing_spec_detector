@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <title>Failing spec detector </title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' media='screen, projection, print' rel='stylesheet' type='text/css'>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'></script>
+  </head>
+  <body>
+    <div class= "w-100 position-relative my-3">
+      <div class="accordion w-75 position-absolute top-10 start-50 translate-middle-x" id="accordionPanelsStayOpenExample">
+        <% @exceptions.uniq.each_with_index do |exception, index| %>
+          <div class="accordion-item">
+            <h2 class="accordion-heade">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-<%= index %>" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                <%= exception %>
+              </button>
+            </h2>
+            <div id="panelsStayOpen-<%= index %>" class="accordion-collapse collapse show">
+              <div class="accordion-body">
+              <ul class="list-group list-group-flush">
+                <% related_examples = @failures.select { |failure| failure.exception == exception } %>
+                <% related_examples.each do |failure| %>
+                  <li class="list-group-item"><%= failure.backtrace %></li>
+                <% end %>
+              </ul>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </body>
+</html>
