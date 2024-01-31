@@ -5,7 +5,7 @@ require_relative '../../failing_spec_detector/failure'
 require_relative '../../failing_spec_detector/combiner'
 
 namespace :failing_specs_detector do
-  desc 'Print all logs in console'
+  desc 'Combine logs and generate log files'
   task :combine_log do
     failures = []
     exceptions = []
@@ -20,6 +20,9 @@ namespace :failing_specs_detector do
       File.delete(file_path)
     end
 
-    FailingSpecDetector::Combiner.new(exceptions, failures).combine
+    combiner = FailingSpecDetector::Combiner.new(exceptions, failures)
+
+    combiner.combine_html
+    combiner.combine
   end
 end
